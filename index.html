@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>KinanUnlock - صفحة واحدة</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; font-family: 'Arial'; }
+    .hero { background-color: #007bff; color: white; padding: 30px 0; text-align: center; }
+    .btn-main { margin: 10px; }
+    .products { display: none; margin-top: 20px; }
+    section { display: none; padding: 20px; background: white; max-width: 600px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+    th { background-color: #2e86de; color: white; }
+    input { padding: 10px; width: 90%; margin: 10px auto; display: block; }
+    button.action { background: #27ae60; }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <h2>الكل في صفحة واحدة - KinanUnlock</h2>
+    <p>مرحبًا بك في موقعنا!</p>
+  </div>
+
+  <div class="container text-center">
+    <button class="btn btn-primary btn-main" onclick="showSection('login')">تسجيل الدخول</button>
+    <button class="btn btn-primary btn-main" onclick="showSection('register')">تسجيل حساب</button>
+    <button class="btn btn-primary btn-main" onclick="showSection('products')">عرض المنتجات</button>
+
+    <section id="login">
+      <h2>تسجيل الدخول</h2>
+      <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" />
+      <input type="password" id="loginPass" placeholder="كلمة المرور" />
+      <button class="action" onclick="signIn()">دخول</button>
+      <p id="loginMsg"></p>
+    </section>
+
+    <section id="register">
+      <h2>تسجيل حساب</h2>
+      <input type="email" id="regEmail" placeholder="البريد الإلكتروني" />
+      <input type="password" id="regPass" placeholder="كلمة المرور" />
+      <button class="action" onclick="signUp()">تسجيل</button>
+      <p id="registerMsg"></p>
+    </section>
+
+    <section id="products">
+      <h2>المنتجات المتوفرة</h2>
+      <table>
+        <tr><th>الخدمة</th><th>المدة</th><th>السعر</th></tr>
+        <tr><td>فك شفرة iPhone</td><td>1-3 أيام</td><td>$25</td></tr>
+        <tr><td>إزالة iCloud</td><td>فوري</td><td>$35</td></tr>
+        <tr><td>تحقق من الشبكة</td><td>10 دقائق</td><td>$1.50</td></tr>
+      </table>
+    </section>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDhwUJUHqF5ykxa2vCbSfAdQrdU63Wxk3k",
+      authDomain: "kinanunlock-347cb.firebaseapp.com",
+      projectId: "kinanunlock-347cb",
+      storageBucket: "kinanunlock-347cb.appspot.com",
+      messagingSenderId: "245786957829",
+      appId: "1:245786957829:web:af47fbc0b7ca81690ce46c",
+      measurementId: "G-KV42XZVDNQ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    window.showSection = function (id) {
+      document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+    };
+
+    window.signUp = function () {
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPass").value;
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => document.getElementById("registerMsg").innerText = "تم التسجيل بنجاح!")
+        .catch(error => document.getElementById("registerMsg").innerText = error.message);
+    };
+
+    window.signIn = function () {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPass").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => document.getElementById("loginMsg").innerText = "تم تسجيل الدخول بنجاح!")
+        .catch(error => document.getElementById("loginMsg").innerText = error.message);
+    };
+  </script>
+</body>
+</html>
