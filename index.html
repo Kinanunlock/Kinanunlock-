@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>KinanUnlock - صفحة واحدة</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: Tahoma, sans-serif; background: #f7f7f7; margin: 0; padding: 0; }
+    header { background: #2e86de; color: white; padding: 20px; text-align: center; font-size: 24px; }
+    nav { text-align: center; margin: 20px; }
+    nav button { padding: 10px 20px; margin: 5px; cursor: pointer; background: #2e86de; color: white; border: none; border-radius: 5px; }
+    section { display: none; padding: 20px; background: white; max-width: 600px; margin: auto; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+    th { background-color: #2e86de; color: white; }
+    input { padding: 10px; width: 90%; margin: 10px auto; display: block; }
+    button.action { background: #27ae60; }
+  </style>
+</head>
+<body>
+
+<header>KinanUnlock - الكل في صفحة واحدة</header>
+
+<nav>
+  <button onclick="showSection('login')">تسجيل الدخول</button>
+  <button onclick="showSection('register')">تسجيل حساب</button>
+  <button onclick="showSection('products')">عرض المنتجات</button>
+</nav>
+
+<section id="login">
+  <h2>تسجيل الدخول</h2>
+  <input type="email" id="loginEmail" placeholder="البريد الإلكتروني" />
+  <input type="password" id="loginPass" placeholder="كلمة المرور" />
+  <button class="action" onclick="signIn()">دخول</button>
+  <p id="loginMsg"></p>
+</section>
+
+<section id="register">
+  <h2>تسجيل حساب</h2>
+  <input type="email" id="regEmail" placeholder="البريد الإلكتروني" />
+  <input type="password" id="regPass" placeholder="كلمة المرور" />
+  <button class="action" onclick="signUp()">تسجيل</button>
+  <p id="registerMsg"></p>
+</section>
+
+<section id="products">
+  <h2>المنتجات المتوفرة</h2>
+  <table>
+    <tr><th>الخدمة</th><th>المدة</th><th>السعر</th></tr>
+    <tr><td>iCloud Remove</td><td>1-3 أيام</td><td>$25</td></tr>
+    <tr><td>Samsung FRP</td><td>فوري</td><td>$5</td></tr>
+    <tr><td>Carrier Check</td><td>10 دقائق</td><td>$1.50</td></tr>
+  </table>
+</section>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDhwUJUHqF5ykxa2vCbSfAdQrdU63Wxk3k",
+    authDomain: "kinanunlock-347cb.firebaseapp.com",
+    projectId: "kinanunlock-347cb",
+    storageBucket: "kinanunlock-347cb.appspot.com",
+    messagingSenderId: "245786957829",
+    appId: "1:245786957829:web:af47fbc0b7ca81690ce46c",
+    measurementId: "G-KV42XZVDNQ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+
+  window.showSection = function (id) {
+    document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+  }
+
+  window.signUp = () => {
+    const email = document.getElementById("regEmail").value;
+    const pass = document.getElementById("regPass").value;
+    createUserWithEmailAndPassword(auth, email, pass)
+      .then(() => document.getElementById("registerMsg").innerText = "تم التسجيل بنجاح!")
+      .catch(err => document.getElementById("registerMsg").innerText = err.message);
+  };
+
+  window.signIn = () => {
+    const email = document.getElementById("loginEmail").value;
+    const pass = document.getElementById("loginPass").value;
+    signInWithEmailAndPassword(auth, email, pass)
+      .then(() => document.getElementById("loginMsg").innerText = "تم تسجيل الدخول!")
+      .catch(err => document.getElementById("loginMsg").innerText = err.message);
+  };
+</script>
+
+</body>
+</html>
